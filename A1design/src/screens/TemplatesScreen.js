@@ -1,175 +1,138 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import {
     StyleSheet,
     View,
     Text,
     TouchableOpacity,
-    SafeAreaView,
     ScrollView,
-    Image,
-    Animated,
-    StatusBar,
+    ImageBackground,
     Dimensions,
+    StatusBar,
+    Image,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const { width } = Dimensions.get('window');
 
-const TemplateCard = ({ name, imageUrl }) => {
-    const scaleAnim = useRef(new Animated.Value(1)).current;
-    const fadeAnim = useRef(new Animated.Value(0)).current;
-
-    useEffect(() => {
-        Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 600,
-            useNativeDriver: true,
-        }).start();
-    }, []);
-
-    const handlePressIn = () => {
-        Animated.spring(scaleAnim, {
-            toValue: 0.97,
-            useNativeDriver: true,
-        }).start();
-    };
-
-    const handlePressOut = () => {
-        Animated.spring(scaleAnim, {
-            toValue: 1,
-            useNativeDriver: true,
-        }).start();
-    };
-
-    return (
-        <Animated.View style={[styles.cardContainer, { transform: [{ scale: scaleAnim }], opacity: fadeAnim }]}>
-            <TouchableOpacity
-                activeOpacity={1}
-                onPressIn={handlePressIn}
-                onPressOut={handlePressOut}
-                style={styles.card}
-            >
-                <Image
-                    source={{ uri: imageUrl || 'https://via.placeholder.com/400x300?text=Temple+Design' }}
-                    style={styles.image}
-                />
-                <View style={styles.info}>
-                    <Text style={styles.name}>{name || 'Temple Template'}</Text>
-                </View>
-            </TouchableOpacity>
-        </Animated.View>
-    );
-};
-
 const TemplatesScreen = ({ navigation }) => {
     const templates = [
-        { id: '1', name: 'Grand Mandir', image: 'https://picsum.photos/400/300?random=101' },
-        { id: '2', name: 'Marble Shrine', image: 'https://picsum.photos/400/300?random=102' },
-        { id: '3', name: 'Vedic Dome', image: 'https://picsum.photos/400/300?random=103' },
-        { id: '4', name: 'Ornate Pillar', image: 'https://picsum.photos/400/300?random=104' },
-        { id: '5', name: 'Modern Temple', image: 'https://picsum.photos/400/300?random=105' },
-        { id: '6', name: 'Stone Carving', image: 'https://picsum.photos/400/300?random=106' },
+        { id: '1', name: 'Ayodhya Classical', category: 'Nagara Style', image: require('../../assets/temple_hero.png') },
+        { id: '2', name: 'Dravidian Grandeur', category: 'South Indian', image: require('../../assets/temple_hero.png') },
+        { id: '3', name: 'Vedic Meditation Hall', category: 'Modern Spiritual', image: require('../../assets/temple_hero.png') },
+        { id: '4', name: 'Golden Pavilion', category: 'Zen Garden', image: require('../../assets/temple_hero.png') },
+        { id: '5', name: 'Royal Pillar Hall', category: 'Palatial', image: require('../../assets/temple_hero.png') },
+        { id: '6', name: 'Lotus Sanctuary', category: 'Floral Motif', image: require('../../assets/temple_hero.png') },
     ];
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <StatusBar barStyle="dark-content" />
-            <View style={styles.header}>
-                <View style={styles.headerLeft}>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                        <Ionicons name="arrow-back" size={24} color="#333" />
-                    </TouchableOpacity>
-                    <Image
-                        source={require('../../assets/a1logo.png')}
-                        style={styles.headerLogo}
-                        resizeMode="contain"
-                    />
-                    <Text style={styles.headerTitle}>Temple Templates</Text>
-                </View>
-            </View>
-            <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-                <View style={styles.grid}>
-                    {templates.map((item) => (
-                        <TemplateCard key={item.id} name={item.name} imageUrl={item.image} />
-                    ))}
-                </View>
-            </ScrollView>
-        </SafeAreaView>
+            <ImageBackground
+                source={require('../../assets/marble_bg.png')}
+                style={styles.backgroundImage}
+                resizeMode="cover"
+            >
+                <LinearGradient
+                    colors={['rgba(255,255,255,0.8)', 'rgba(255,255,255,0.4)', 'rgba(255,255,255,0.9)']}
+                    style={StyleSheet.absoluteFill}
+                />
+
+                <SafeAreaView style={{ flex: 1 }}>
+                    <View style={styles.header}>
+                        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+                            <Ionicons name="chevron-back" size={28} color="#1a1a1a" />
+                        </TouchableOpacity>
+                        <Text style={styles.headerTitle}>Temple Templates</Text>
+                        <View style={{ width: 40 }} />
+                    </View>
+
+                    <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+                        <Text style={styles.subtitle}>Select a base for your next masterpiece</Text>
+
+                        <View style={styles.grid}>
+                            {templates.map((template) => (
+                                <TouchableOpacity
+                                    key={template.id}
+                                    style={styles.templateCard}
+                                    onPress={() => navigation.navigate('ProjectDetailScreen', { project: template })}
+                                >
+                                    <View style={styles.imageWrapper}>
+                                        <Image source={template.image} style={styles.templateImage} />
+                                        <LinearGradient
+                                            colors={['transparent', 'rgba(0,0,0,0.6)']}
+                                            style={styles.imageOverlay}
+                                        />
+                                        <View style={styles.categoryBadge}>
+                                            <Text style={styles.categoryText}>{template.category}</Text>
+                                        </View>
+                                    </View>
+                                    <View style={styles.cardInfo}>
+                                        <Text style={styles.templateName}>{template.name}</Text>
+                                        <TouchableOpacity style={styles.useBtn}>
+                                            <Text style={styles.useBtnText}>Use Template</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                    </ScrollView>
+                </SafeAreaView>
+            </ImageBackground>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#F5F5F7',
-    },
+    container: { flex: 1, backgroundColor: '#F7F5F0' },
+    backgroundImage: { flex: 1 },
     header: {
+        height: 60,
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
         paddingHorizontal: 20,
-        paddingVertical: 15,
-        backgroundColor: '#FFF',
-        elevation: 4,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.05,
-        shadowRadius: 5,
-        justifyContent: 'space-between',
     },
-    headerLeft: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    headerLogo: {
-        width: 30,
-        height: 30,
-        marginRight: 10,
-    },
-    backButton: {
-        padding: 5,
-        marginRight: 5,
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: '900',
-        color: '#1A1A1A',
-    },
-    scrollContent: {
-        padding: 15,
-    },
-    grid: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-    },
-    cardContainer: {
-        width: (width - 45) / 2,
-        marginBottom: 20,
-    },
-    card: {
-        backgroundColor: '#FFF',
-        borderRadius: 18,
+    backButton: { width: 40, height: 40, justifyContent: 'center' },
+    headerTitle: { fontSize: 20, fontWeight: '600', color: '#1a1a1a' },
+    scrollContent: { paddingHorizontal: 20, paddingBottom: 40, paddingTop: 8 },
+    subtitle: { fontSize: 15, color: '#777', marginBottom: 24, fontWeight: '500' },
+    grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },
+    templateCard: {
+        width: '48%',
+        backgroundColor: '#FFFFFF',
+        borderRadius: 20,
+        marginBottom: 16,
         overflow: 'hidden',
-        elevation: 8,
         shadowColor: '#000',
+        shadowOpacity: 0.08,
+        shadowRadius: 12,
         shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 10,
+        elevation: 4,
     },
-    image: {
-        width: '100%',
-        height: 140,
-        backgroundColor: '#EEE',
+    imageWrapper: { height: 140, width: '100%' },
+    templateImage: { width: '100%', height: '100%' },
+    imageOverlay: { ...StyleSheet.absoluteFillObject },
+    categoryBadge: {
+        position: 'absolute',
+        top: 10,
+        left: 10,
+        backgroundColor: 'rgba(255,255,255,0.9)',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 8,
     },
-    info: {
-        padding: 12,
+    categoryText: { fontSize: 10, fontWeight: '800', color: '#D4AF37' },
+    cardInfo: { padding: 12 },
+    templateName: { fontSize: 16, fontWeight: '600', color: '#1a1a1a', marginBottom: 10 },
+    useBtn: {
+        backgroundColor: '#EDEDED',
+        paddingVertical: 8,
+        borderRadius: 14,
         alignItems: 'center',
     },
-    name: {
-        fontSize: 14,
-        fontWeight: '700',
-        color: '#333',
-    },
+    useBtnText: { fontSize: 11, fontWeight: '800', color: '#333' },
 });
 
 export default TemplatesScreen;

@@ -4,178 +4,127 @@ import {
     View,
     Text,
     TouchableOpacity,
-    SafeAreaView,
-    StatusBar,
     ScrollView,
+    ImageBackground,
+    Dimensions,
+    StatusBar,
     Switch,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+
+const { width } = Dimensions.get('window');
 
 const SettingsScreen = ({ navigation }) => {
-    const [isDarkMode, setIsDarkMode] = useState(false);
-    const [notifications, setNotifications] = useState(true);
+    const [notifs, setNotifs] = useState(true);
+    const [cloudSync, setCloudSync] = useState(true);
+    const [biometrics, setBiometrics] = useState(false);
 
-    const SettingRow = ({ icon, title, value, onToggle, isSwitch = false, onPress }) => (
-        <TouchableOpacity
-            style={styles.settingRow}
-            onPress={onPress}
-            activeOpacity={isSwitch ? 1 : 0.7}
-        >
-            <View style={styles.settingLeft}>
-                <View style={[styles.iconBox, { backgroundColor: isDarkMode ? '#333' : '#F9F9F9' }]}>
-                    <Ionicons name={icon} size={22} color={isDarkMode ? '#D4AF37' : '#666'} />
-                </View>
-                <Text style={styles.settingTitle}>{title}</Text>
-            </View>
-            {isSwitch ? (
-                <Switch
-                    value={value}
-                    onToggle={onToggle}
-                    trackColor={{ false: '#EEE', true: '#D4AF3750' }}
-                    thumbColor={value ? '#D4AF37' : '#FFF'}
-                />
-            ) : (
-                <Ionicons name="chevron-forward" size={20} color="#DDD" />
-            )}
-        </TouchableOpacity>
-    );
+    const settingSections = [
+        {
+            title: 'App Preferences',
+            items: [
+                { id: '1', title: 'Notifications', type: 'switch', value: notifs, setter: setNotifs },
+                { id: '2', title: 'Cloud Sync', type: 'switch', value: cloudSync, setter: setCloudSync },
+                { id: '3', title: 'Dark Mode', type: 'label', value: 'System Default' },
+            ]
+        },
+        {
+            title: 'Security',
+            items: [
+                { id: '4', title: 'Biometric Lock', type: 'switch', value: biometrics, setter: setBiometrics },
+                { id: '5', title: 'Change Password', type: 'button' },
+            ]
+        }
+    ];
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <StatusBar barStyle="dark-content" />
+            <ImageBackground
+                source={require('../../assets/marble_bg.png')}
+                style={styles.backgroundImage}
+                resizeMode="cover"
+            >
+                <LinearGradient
+                    colors={['rgba(255,255,255,0.85)', 'rgba(255,255,255,0.6)', 'rgba(255,255,255,0.95)']}
+                    style={StyleSheet.absoluteFill}
+                />
 
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                    <Ionicons name="arrow-back" size={24} color="#333" />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>Settings</Text>
-                <View style={{ width: 24 }} />
-            </View>
-
-            <ScrollView contentContainerStyle={styles.scrollContent}>
-                <View style={styles.section}>
-                    <Text style={styles.sectionLabel}>Account</Text>
-                    <SettingRow icon="person-outline" title="Edit Profile" onPress={() => { }} />
-                    <SettingRow icon="lock-closed-outline" title="Change Password" onPress={() => { }} />
-                </View>
-
-                <View style={styles.section}>
-                    <Text style={styles.sectionLabel}>Preferences</Text>
-                    <SettingRow
-                        icon="moon-outline"
-                        title="Dark Mode"
-                        isSwitch
-                        value={isDarkMode}
-                        onToggle={() => setIsDarkMode(!isDarkMode)}
-                    />
-                    <SettingRow
-                        icon="notifications-outline"
-                        title="Notifications"
-                        isSwitch
-                        value={notifications}
-                        onToggle={() => setNotifications(!notifications)}
-                    />
-                </View>
-
-                <View style={styles.section}>
-                    <Text style={styles.sectionLabel}>App Info</Text>
-                    <SettingRow icon="document-text-outline" title="Privacy Policy" onPress={() => { }} />
-                    <SettingRow icon="information-circle-outline" title="About Us" onPress={() => { }} />
-                    <View style={styles.versionContainer}>
-                        <Text style={styles.versionLabel}>Version</Text>
-                        <Text style={styles.versionValue}>1.0.0 (Build 2412)</Text>
+                <SafeAreaView style={{ flex: 1 }}>
+                    <View style={styles.header}>
+                        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+                            <Ionicons name="chevron-back" size={28} color="#1a1a1a" />
+                        </TouchableOpacity>
+                        <Text style={styles.headerTitle}>Settings</Text>
+                        <View style={{ width: 40 }} />
                     </View>
-                </View>
-            </ScrollView>
-        </SafeAreaView>
+
+                    <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+                        {settingSections.map((section, idx) => (
+                            <View key={idx} style={styles.section}>
+                                <Text style={styles.sectionTitle}>{section.title}</Text>
+                                <View style={styles.sectionCard}>
+                                    {section.items.map((item, i) => (
+                                        <View key={item.id} style={[styles.settingItem, i === section.items.length - 1 && { borderBottomWidth: 0 }]}>
+                                            <Text style={styles.itemTitle}>{item.title}</Text>
+
+                                            {item.type === 'switch' && (
+                                                <Switch
+                                                    value={item.value}
+                                                    onValueChange={item.setter}
+                                                    trackColor={{ false: '#DDD', true: '#D4AF37' }}
+                                                    thumbColor="#FFF"
+                                                />
+                                            )}
+
+                                            {item.type === 'label' && (
+                                                <Text style={styles.itemValue}>{item.value}</Text>
+                                            )}
+
+                                            {item.type === 'button' && (
+                                                <Ionicons name="chevron-forward" size={18} color="#CCC" />
+                                            )}
+                                        </View>
+                                    ))}
+                                </View>
+                            </View>
+                        ))}
+
+                        <View style={styles.footer}>
+                            <Text style={styles.version}>A1 Temple Studio v2.4.0</Text>
+                            <Text style={styles.copyright}>© 2026 A1 Architecture Group</Text>
+                        </View>
+                    </ScrollView>
+                </SafeAreaView>
+            </ImageBackground>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#F5F5F7',
-    },
+    container: { flex: 1, backgroundColor: '#F7F5F0' },
+    backgroundImage: { flex: 1 },
     header: {
+        height: 60,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 20,
-        paddingVertical: 15,
-        backgroundColor: '#FFF',
-        borderBottomWidth: 1,
-        borderBottomColor: '#EEE',
     },
-    backButton: {
-        padding: 5,
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: '900',
-        color: '#1A1A1A',
-    },
-    scrollContent: {
-        padding: 20,
-    },
-    section: {
-        marginBottom: 30,
-    },
-    sectionLabel: {
-        fontSize: 12,
-        fontWeight: '900',
-        color: '#BBB',
-        marginBottom: 10,
-        marginLeft: 5,
-        letterSpacing: 1,
-        textTransform: 'uppercase',
-    },
-    settingRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: '#FFF',
-        padding: 15,
-        borderRadius: 18,
-        marginBottom: 10,
-        elevation: 2,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.05,
-        shadowRadius: 5,
-    },
-    settingLeft: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    iconBox: {
-        width: 38,
-        height: 38,
-        borderRadius: 12,
-        backgroundColor: '#F9F9F9',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 15,
-    },
-    settingTitle: {
-        fontSize: 15,
-        fontWeight: '700',
-        color: '#333',
-    },
-    versionContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingHorizontal: 5,
-        marginTop: 10,
-    },
-    versionLabel: {
-        color: '#AAA',
-        fontSize: 13,
-    },
-    versionValue: {
-        color: '#AAA',
-        fontSize: 13,
-        fontWeight: '600',
-    },
+    backButton: { width: 40, height: 40, justifyContent: 'center' },
+    headerTitle: { fontSize: 20, fontWeight: '600', color: '#1a1a1a' },
+    scrollContent: { paddingHorizontal: 20, paddingBottom: 40, paddingTop: 8 },
+    section: { marginBottom: 24 },
+    sectionTitle: { fontSize: 13, fontWeight: '700', color: '#999', textTransform: 'uppercase', letterSpacing: 1, marginLeft: 10, marginBottom: 12 },
+    sectionCard: { backgroundColor: '#FFFFFF', borderRadius: 20, padding: 8, shadowColor: '#000', shadowOpacity: 0.04, shadowRadius: 10, elevation: 2 },
+    settingItem: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16, borderBottomWidth: 1, borderBottomColor: '#F8F8F8' },
+    itemTitle: { fontSize: 15, fontWeight: '700', color: '#333' },
+    itemValue: { fontSize: 14, color: '#999', fontWeight: '600' },
+    footer: { alignItems: 'center', marginTop: 20, marginBottom: 40 },
+    version: { fontSize: 12, color: '#BBB', fontWeight: '700', marginBottom: 4 },
+    copyright: { fontSize: 11, color: '#DDD', fontWeight: '600' },
 });
 
 export default SettingsScreen;

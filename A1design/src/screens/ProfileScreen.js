@@ -4,217 +4,170 @@ import {
     View,
     Text,
     TouchableOpacity,
-    SafeAreaView,
-    Image,
-    StatusBar,
     ScrollView,
+    ImageBackground,
+    Dimensions,
+    StatusBar,
+    Image,
+    Switch,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+
+const { width } = Dimensions.get('window');
 
 const ProfileScreen = ({ navigation }) => {
-    const user = {
-        name: 'A1 User',
-        email: 'user@a1studio.com',
-        subscription: 'GOLDEN',
-    };
-
-    const MenuButton = ({ icon, title, onPress, color = '#333' }) => (
-        <TouchableOpacity
-            style={styles.menuItem}
-            onPress={onPress}
-        >
-            <View style={styles.menuLeft}>
-                <View style={styles.iconContainer}>
-                    <Ionicons name={icon} size={22} color={color === '#333' ? '#D4AF37' : color} />
-                </View>
-                <Text style={styles.menuTitle}>{title}</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color="#EEE" />
-        </TouchableOpacity>
-    );
+    const menuItems = [
+        { id: '1', title: 'My Subscription', icon: 'ribbon-outline', color: '#D4AF37', screen: 'SubscriptionScreen' },
+        { id: '2', title: 'Project History', icon: 'time-outline', color: '#666', screen: 'SavedProjectsScreen' },
+        { id: '3', title: 'App Settings', icon: 'settings-outline', color: '#666', screen: 'SettingsScreen' },
+        { id: '4', title: 'Help & Support', icon: 'help-circle-outline', color: '#666' },
+        { id: '5', title: 'Terms & Privacy', icon: 'document-text-outline', color: '#666' },
+    ];
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <StatusBar barStyle="dark-content" />
+            <ImageBackground
+                source={require('../../assets/marble_bg.png')}
+                style={styles.backgroundImage}
+                resizeMode="cover"
+            >
+                <LinearGradient
+                    colors={['rgba(255,255,255,0.85)', 'rgba(255,255,255,0.6)', 'rgba(255,255,255,0.95)']}
+                    style={StyleSheet.absoluteFill}
+                />
 
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                    <Ionicons name="arrow-back" size={24} color="#333" />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>My Profile</Text>
-                <TouchableOpacity style={styles.editButton}>
-                    <Ionicons name="create-outline" size={24} color="#D4AF37" />
-                </TouchableOpacity>
-            </View>
-
-            <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-                <View style={styles.profileSection}>
-                    <View style={styles.avatarContainer}>
-                        <Ionicons name="person-circle" size={100} color="#D4AF37" />
-                        <View style={styles.badgeContainer}>
-                            <Text style={styles.badgeText}>{user.subscription}</Text>
-                        </View>
+                <SafeAreaView style={{ flex: 1 }}>
+                    <View style={styles.header}>
+                        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+                            <Ionicons name="chevron-back" size={28} color="#1a1a1a" />
+                        </TouchableOpacity>
+                        <Text style={styles.headerTitle}>Profile</Text>
+                        <TouchableOpacity style={styles.headerAction}>
+                            <Ionicons name="log-out-outline" size={24} color="#C42D2D" />
+                        </TouchableOpacity>
                     </View>
-                    <Text style={styles.userName}>{user.name}</Text>
-                    <Text style={styles.userEmail}>{user.email}</Text>
-                </View>
 
-                <View style={styles.menuSection}>
-                    <MenuButton
-                        icon="star-outline"
-                        title="My Subscription"
-                        onPress={() => navigation.navigate('SubscriptionScreen')}
-                        color="#D4AF37"
-                    />
-                    <MenuButton
-                        icon="settings-outline"
-                        title="Settings"
-                        onPress={() => navigation.navigate('SettingsScreen')}
-                    />
-                    <MenuButton
-                        icon="help-circle-outline"
-                        title="Help & Support"
-                        onPress={() => { }}
-                    />
-                </View>
+                    <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+                        {/* PROFILE CARD */}
+                        <View style={styles.profileCard}>
+                            <View style={styles.avatarWrapper}>
+                                <View style={styles.avatarCircle}>
+                                    <Ionicons name="person" size={50} color="#DDD" />
+                                </View>
+                                <View style={styles.editBadge}>
+                                    <Ionicons name="camera" size={14} color="#FFF" />
+                                </View>
+                            </View>
+                            <Text style={styles.userName}>Jainav Shah</Text>
+                            <Text style={styles.userEmail}>jainavtech24@gmail.com</Text>
 
-                <TouchableOpacity
-                    style={styles.logoutButton}
-                    onPress={() => navigation.replace('LoginScreen')}
-                >
-                    <Ionicons name="log-out-outline" size={22} color="#D4AF37" />
-                    <Text style={styles.logoutText}>Logout</Text>
-                </TouchableOpacity>
-            </ScrollView>
-        </SafeAreaView>
+                            <LinearGradient
+                                colors={['#D4AF37', '#F3E5AB']}
+                                start={{ x: 0, y: 0 }}
+                                end={{ x: 1, y: 0 }}
+                                style={styles.planBadge}
+                            >
+                                <Ionicons name="ribbon" size={14} color="#FFF" />
+                                <Text style={styles.planText}>Platinum Designer</Text>
+                            </LinearGradient>
+                        </View>
+
+                        {/* STATS AREA */}
+                        <View style={styles.statsContainer}>
+                            <View style={styles.statItem}>
+                                <Text style={styles.statValue}>24</Text>
+                                <Text style={styles.statLabel}>Projects</Text>
+                            </View>
+                            <View style={styles.statDivider} />
+                            <View style={styles.statItem}>
+                                <Text style={styles.statValue}>128</Text>
+                                <Text style={styles.statLabel}>Assets</Text>
+                            </View>
+                            <View style={styles.statDivider} />
+                            <View style={styles.statItem}>
+                                <Text style={styles.statValue}>Pro</Text>
+                                <Text style={styles.statLabel}>Tier</Text>
+                            </View>
+                        </View>
+
+                        {/* MENU LIST */}
+                        <View style={styles.menuContainer}>
+                            {menuItems.map((item) => (
+                                <TouchableOpacity
+                                    key={item.id}
+                                    style={styles.menuItem}
+                                    onPress={() => item.screen && navigation.navigate(item.screen)}
+                                >
+                                    <View style={[styles.menuIconWrapper, { backgroundColor: item.color + '10' }]}>
+                                        <Ionicons name={item.icon} size={20} color={item.color} />
+                                    </View>
+                                    <Text style={styles.menuTitle}>{item.title}</Text>
+                                    <Ionicons name="chevron-forward" size={18} color="#CCC" />
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+
+                        <TouchableOpacity
+                            style={styles.logoutBtn}
+                            onPress={() => navigation.replace('LoginScreen')}
+                        >
+                            <Text style={styles.logoutBtnText}>Sign Out</Text>
+                        </TouchableOpacity>
+                    </ScrollView>
+                </SafeAreaView>
+            </ImageBackground>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#F5F5F7',
-    },
+    container: { flex: 1, backgroundColor: '#F7F5F0' },
+    backgroundImage: { flex: 1 },
     header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 20,
-        paddingVertical: 15,
-        backgroundColor: '#FFF',
-    },
-    backButton: {
-        padding: 5,
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: '900',
-        color: '#333',
-    },
-    editButton: {
-        padding: 5,
-    },
-    scrollContent: {
-        paddingBottom: 40,
-    },
-    profileSection: {
-        alignItems: 'center',
-        paddingVertical: 40,
-        backgroundColor: '#FFF',
-        borderBottomLeftRadius: 35,
-        borderBottomRightRadius: 35,
-        elevation: 10,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.1,
-        shadowRadius: 15,
-    },
-    avatarContainer: {
-        position: 'relative',
-        marginBottom: 15,
-    },
-    badgeContainer: {
-        position: 'absolute',
-        bottom: 5,
-        right: 0,
-        paddingHorizontal: 12,
-        paddingVertical: 4,
-        borderRadius: 12,
-        backgroundColor: '#D4AF37',
-        borderWidth: 3,
-        borderColor: '#FFF',
-    },
-    badgeText: {
-        color: '#FFF',
-        fontSize: 10,
-        fontWeight: '900',
-    },
-    userName: {
-        fontSize: 24,
-        fontWeight: '900',
-        color: '#333',
-    },
-    userEmail: {
-        fontSize: 14,
-        marginTop: 5,
-        fontWeight: '500',
-        color: '#777',
-    },
-    menuSection: {
-        marginTop: 30,
-        paddingHorizontal: 20,
-    },
-    menuItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: '#FFF',
-        padding: 15,
-        borderRadius: 20,
-        marginBottom: 12,
-        elevation: 4,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.05,
-        shadowRadius: 8,
-    },
-    menuLeft: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    iconContainer: {
-        width: 44,
-        height: 44,
-        borderRadius: 14,
-        backgroundColor: '#F5F5F7',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 15,
-    },
-    menuTitle: {
-        fontSize: 16,
-        fontWeight: '700',
-        color: '#333',
-    },
-    logoutButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 30,
-        marginHorizontal: 20,
         height: 60,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
+    },
+    backButton: { width: 40, height: 40, justifyContent: 'center' },
+    headerTitle: { fontSize: 20, fontWeight: '600', color: '#1a1a1a' },
+    headerAction: { width: 40, height: 40, justifyContent: 'center', alignItems: 'flex-end' },
+    scrollContent: { paddingHorizontal: 20, paddingBottom: 40, paddingTop: 8 },
+    profileCard: {
+        backgroundColor: '#FFFFFF',
         borderRadius: 20,
-        backgroundColor: '#FFF1F1',
-        borderWidth: 1,
-        borderColor: '#FEE',
+        padding: 16,
+        paddingVertical: 24,
+        alignItems: 'center',
+        marginBottom: 16,
+        shadowColor: '#000',
+        shadowOpacity: 0.08,
+        shadowRadius: 12,
+        shadowOffset: { width: 0, height: 4 },
+        elevation: 4,
     },
-    logoutText: {
-        fontSize: 16,
-        fontWeight: '900',
-        color: '#D4AF37',
-        marginLeft: 10,
-        letterSpacing: 1,
-    },
+    avatarWrapper: { marginBottom: 16 },
+    avatarCircle: { width: 100, height: 100, borderRadius: 50, backgroundColor: '#F8F8F8', justifyContent: 'center', alignItems: 'center', borderWidth: 4, borderColor: '#FFF', shadowColor: '#000', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.1, shadowRadius: 12 },
+    editBadge: { position: 'absolute', bottom: 0, right: 0, width: 32, height: 32, borderRadius: 16, backgroundColor: '#C42D2D', justifyContent: 'center', alignItems: 'center', borderWidth: 3, borderColor: '#FFF' },
+    userName: { fontSize: 20, fontWeight: '700', color: '#1a1a1a', marginBottom: 4 },
+    userEmail: { fontSize: 13, color: '#777', fontWeight: '500', marginBottom: 16 },
+    planBadge: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20 },
+    planText: { color: '#FFF', fontSize: 11, fontWeight: '800', marginLeft: 6, letterSpacing: 0.5 },
+    statsContainer: { flexDirection: 'row', backgroundColor: '#FFFFFF', borderRadius: 20, padding: 20, marginBottom: 16, justifyContent: 'space-around', alignItems: 'center', shadowColor: '#000', shadowOpacity: 0.04, shadowRadius: 10, elevation: 2 },
+    statItem: { alignItems: 'center' },
+    statValue: { fontSize: 18, fontWeight: '700', color: '#1a1a1a' },
+    statLabel: { fontSize: 12, color: '#999', fontWeight: '600', marginTop: 2 },
+    statDivider: { width: 1, height: 30, backgroundColor: 'rgba(0,0,0,0.05)' },
+    menuContainer: { backgroundColor: '#FFFFFF', borderRadius: 20, padding: 8, marginBottom: 16, shadowColor: '#000', shadowOpacity: 0.04, shadowRadius: 10, elevation: 2 },
+    menuItem: { flexDirection: 'row', alignItems: 'center', padding: 15, borderRadius: 16 },
+    menuIconWrapper: { width: 40, height: 40, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginRight: 15 },
+    menuTitle: { flex: 1, fontSize: 15, fontWeight: '700', color: '#333' },
+    logoutBtn: { backgroundColor: 'rgba(196, 45, 45, 0.05)', height: 56, borderRadius: 28, justifyContent: 'center', alignItems: 'center', marginBottom: 40 },
+    logoutBtnText: { color: '#C42D2D', fontSize: 16, fontWeight: '800' },
 });
 
 export default ProfileScreen;
