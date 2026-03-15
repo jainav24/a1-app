@@ -24,3 +24,10 @@ export const ASSET_CATEGORIES = [
   { id: 'chaat', name: 'Chaat', icon: 'texture-box' },
   { id: 'background', name: 'Background', icon: 'image-filter-hdr' },
 ];
+
+export const ASSETS = {
+  pillar: [Pillar1],
+  patti: [Patti1],
+  chaat: [Chaat1],
+  background: [Bg1]
+};
