@@ -9,12 +9,13 @@ import {
 } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../context/ThemeContext';
 
 const { width } = Dimensions.get('window');
 
 const SplashScreen = ({ navigation }) => {
+    const { colors } = useTheme();
     const fadeAnim = useRef(new Animated.Value(0)).current;
-
     const [imageError, setImageError] = React.useState(false);
 
     useEffect(() => {
@@ -34,8 +35,8 @@ const SplashScreen = ({ navigation }) => {
     }, [fadeAnim, navigation]);
 
     return (
-        <View style={[styles.container, { backgroundColor: '#FFF' }]}>
-            <StatusBar hidden />
+        <View style={[styles.container, { backgroundColor: colors.background }]}>
+            <StatusBar barStyle={colors.statusBar} />
             <Animated.View style={{ opacity: fadeAnim, transform: [{ scale: fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [0.8, 1] }) }] }}>
                 {!imageError ? (
                     <Image
@@ -45,8 +46,8 @@ const SplashScreen = ({ navigation }) => {
                         onError={() => setImageError(true)}
                     />
                 ) : (
-                    <View style={styles.fallbackLogo}>
-                        <Ionicons name="home" size={60} color="#C62828" />
+                    <View style={[styles.fallbackLogo, { backgroundColor: colors.inputBg }]}>
+                        <Ionicons name="home" size={60} color={colors.primary} />
                     </View>
                 )}
             </Animated.View>
