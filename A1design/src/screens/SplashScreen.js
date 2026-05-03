@@ -23,7 +23,7 @@ const SplashScreen = ({ navigation }) => {
         Animated.timing(fadeAnim, {
             toValue: 1,
             duration: 1000,
-            useNativeDriver: true,
+            useNativeDriver: false,
         }).start();
 
         // Navigate to Login after 2 seconds

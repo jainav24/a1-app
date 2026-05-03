@@ -74,7 +74,7 @@ const SavedProjectsScreen = ({ navigation }) => {
                         ))}
                     </ScrollView>
 
-                    <TouchableOpacity style={styles.fab} onPress={() => navigation.navigate('DesignCanvasScreen')}>
+                    <TouchableOpacity style={styles.fab} onPress={() => navigation.navigate('CanvasScreen')}>
                         <LinearGradient colors={['#C42D2D', '#8B1E1E']} style={styles.fabGradient}>
                             <Ionicons name="add" size={32} color="#FFF" />
                         </LinearGradient>
@@ -106,10 +106,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         padding: 16,
         marginBottom: 16,
-        shadowColor: '#000',
-        shadowOpacity: 0.08,
-        shadowRadius: 12,
-        shadowOffset: { width: 0, height: 4 },
+        boxShadow: '0px 4px 12px rgba(0,0,0,0.08)',
         elevation: 4,
     },
     previewContainer: {
@@ -149,10 +146,7 @@ const styles = StyleSheet.create({
         width: 64,
         height: 64,
         borderRadius: 32,
-        shadowColor: '000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 10,
+        boxShadow: '0px 4px 10px rgba(0,0,0,0.2)',
         elevation: 6,
     },
     fabGradient: { flex: 1, borderRadius: 32, justifyContent: 'center', alignItems: 'center' },

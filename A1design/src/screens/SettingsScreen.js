@@ -33,7 +33,7 @@ const SettingItem = ({ title, icon, library: Library = Ionicons, type, value, se
     const onPressIn = () => {
         Animated.spring(scaleAnim, {
             toValue: 0.96,
-            useNativeDriver: true,
+            useNativeDriver: false,
         }).start();
     };
 
@@ -42,7 +42,7 @@ const SettingItem = ({ title, icon, library: Library = Ionicons, type, value, se
             toValue: 1,
             friction: 3,
             tension: 40,
-            useNativeDriver: true,
+            useNativeDriver: false,
         }).start();
     };
 
@@ -228,7 +228,18 @@ const SettingsScreen = ({ navigation }) => {
                     </View>
                 ))}
 
-                <TouchableOpacity style={[styles.logoutBtn, { borderTopColor: colors.border }]}>
+                <TouchableOpacity
+                    style={[styles.logoutBtn, { borderTopColor: colors.border }]}
+                    onPress={async () => {
+                        try {
+                            await AsyncStorage.clear();
+                        } catch (_) {}
+                        navigation.reset({
+                            index: 0,
+                            routes: [{ name: 'LoginScreen' }],
+                        });
+                    }}
+                >
                     <Ionicons name="log-out-outline" size={22} color="#FF3B30" />
                     <Text style={styles.logoutText}>Log Out</Text>
                 </TouchableOpacity>
@@ -300,7 +311,7 @@ const styles = StyleSheet.create({
         marginBottom: 24,
         borderWidth: 1,
         ...Platform.select({
-            ios: { shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } },
+            ios: { boxShadow: '0px 4px 10px rgba(0,0,0,0.08)' },
             android: { elevation: 3 }
         })
     },

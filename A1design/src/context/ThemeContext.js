@@ -1,5 +1,5 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const ThemeContext = createContext();
 
@@ -41,11 +41,9 @@ export const ThemeProvider = ({ children }) => {
     const [theme, setTheme] = useState('light');
 
     useEffect(() => {
-        console.log('--- ThemeProvider Mounted ---');
         AsyncStorage.getItem('appTheme').then((saved) => {
             if (saved === 'dark' || saved === 'light') {
                 setTheme(saved);
-                console.log('--- Theme Loaded:', saved);
             }
         });
     }, []);

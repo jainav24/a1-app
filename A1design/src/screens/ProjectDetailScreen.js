@@ -49,7 +49,7 @@ const ProjectDetailScreen = ({ route, navigation }) => {
                             <View style={styles.actionGrid}>
                                 <TouchableOpacity
                                     style={styles.actionItem}
-                                    onPress={() => navigation.navigate('DesignCanvasScreen', { project })}
+                                    onPress={() => navigation.navigate('CanvasScreen', { project })}
                                 >
                                     <View style={[styles.actionIcon, { backgroundColor: 'rgba(196, 45, 45, 0.1)' }]}>
                                         <Ionicons name="brush" size={24} color="#C42D2D" />
@@ -120,10 +120,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         borderRadius: 20,
         padding: 16,
-        shadowColor: '#000',
-        shadowOpacity: 0.08,
-        shadowRadius: 12,
-        shadowOffset: { width: 0, height: 4 },
+        boxShadow: '0px 4px 12px rgba(0,0,0,0.08)',
         elevation: 10,
     },
     projectTitle: { fontSize: 22, fontWeight: '700', color: '#1a1a1a', marginBottom: 4 },

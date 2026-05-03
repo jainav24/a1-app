@@ -27,7 +27,7 @@ const A1BotScreen = ({ navigation }) => {
         Animated.timing(fadeAnim, {
             toValue: 1,
             duration: 800,
-            useNativeDriver: true,
+            useNativeDriver: false,
         }).start();
     }, []);
 
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     chatContainer: { flex: 1 },
     scrollContent: { padding: 24, paddingBottom: 100 },
     welcomeSection: { alignItems: 'center', marginTop: 40, marginBottom: 50 },
-    aiIconWrapper: { width: 100, height: 100, borderRadius: 35, overflow: 'hidden', marginBottom: 24, elevation: 10, shadowColor: '#D4AF37', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.2, shadowRadius: 20 },
+    aiIconWrapper: { width: 100, height: 100, borderRadius: 35, overflow: 'hidden', marginBottom: 24, elevation: 10, boxShadow: '0px 10px 20px rgba(212,175,55,0.2)' },
     aiIconGradient: { flex: 1, justifyContent: 'center', alignItems: 'center' },
     welcomeTitle: { fontSize: 24, fontWeight: '900', color: '#1a1a1a', marginBottom: 12 },
     welcomeSubtitle: { fontSize: 16, color: '#666', textAlign: 'center', lineHeight: 24, paddingHorizontal: 20 },
@@ -140,10 +140,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         padding: 16,
         marginBottom: 12,
-        shadowColor: '#000',
-        shadowOpacity: 0.08,
-        shadowRadius: 12,
-        shadowOffset: { width: 0, height: 4 },
+        boxShadow: '0px 4px 12px rgba(0,0,0,0.08)',
         elevation: 4,
     },
     suggestionText: { flex: 1, marginLeft: 12, fontSize: 14, color: '#333', fontWeight: '600' },
@@ -155,10 +152,7 @@ const styles = StyleSheet.create({
         borderRadius: 27,
         paddingHorizontal: 20,
         paddingVertical: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.06,
-        shadowRadius: 10,
-        shadowOffset: { width: 0, height: 4 },
+        boxShadow: '0px 4px 10px rgba(0,0,0,0.06)',
         elevation: 10,
     },
     input: { flex: 1, minHeight: 40, maxHeight: 120, fontSize: 16, color: '#1a1a1a', paddingTop: 10 },

@@ -160,10 +160,7 @@ const styles = StyleSheet.create({
     card: {
         borderRadius: 20,
         padding: 24,
-        shadowColor: '#000',
-        shadowOpacity: 0.06,
-        shadowRadius: 10,
-        shadowOffset: { width: 0, height: 4 },
+        boxShadow: '0px 4px 10px rgba(0,0,0,0.06)',
         elevation: 3,
     },
     lastUpdated: { fontSize: 12, fontWeight: '600', marginBottom: 20 },

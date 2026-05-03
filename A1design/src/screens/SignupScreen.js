@@ -22,11 +22,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../context/ThemeContext';
 import CustomButton from '../components/CustomButton';
 
-const { width } = Dimensions.get('window');
-
+import { getResponsiveValues } from '../utils/responsive';
 const SignupScreen = ({ navigation }) => {
     const { theme, toggleTheme, colors } = useTheme();
     const isDark = theme === 'dark';
+    const { height, width } = Dimensions.get('window');
+    const { moderateScale } = getResponsiveValues(width, height);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -46,13 +47,13 @@ const SignupScreen = ({ navigation }) => {
             Animated.timing(fadeAnim, {
                 toValue: 1,
                 duration: 800,
-                useNativeDriver: true,
+                useNativeDriver: false,
             }),
             Animated.spring(slideAnim, {
                 toValue: 0,
                 tension: 50,
                 friction: 7,
-                useNativeDriver: true,
+                useNativeDriver: false,
             }),
         ]).start();
     }, []);
@@ -111,7 +112,7 @@ const SignupScreen = ({ navigation }) => {
                 style={styles.keyboardView}
             >
                 <ScrollView
-                    contentContainerStyle={styles.scrollWrapper}
+                    contentContainerStyle={[styles.scrollWrapper, { maxWidth: moderateScale(400), alignSelf: 'center', width: '100%' }]}
                     showsVerticalScrollIndicator={false}
                     keyboardShouldPersistTaps="handled"
                 >
@@ -325,12 +326,10 @@ const styles = StyleSheet.create({
         marginTop: 15,
     },
     glassCard: {
-        alignSelf: 'center',
+        alignSelf: 'stretch',
         borderRadius: 32,
         padding: 24,
-        shadowColor: '#000',
-        shadowOpacity: 0.08,
-        shadowRadius: 20,
+        width: '100%',
         elevation: 8,
     },
     cardHeader: {

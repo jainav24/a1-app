@@ -17,9 +17,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 const { width } = Dimensions.get('window');
 
 const A1DesignScreen = ({ navigation }) => {
-    const [activeTab, setActiveTab] = useState('Pillars');
+    // 'All' tab added so users can browse everything; default to first category
+    const [activeTab, setActiveTab] = useState('All');
 
-    const categories = ['Pillars', 'Domes', 'Entrances', 'Carvings'];
+    const categories = ['All', 'Pillars', 'Domes', 'Entrances', 'Carvings'];
 
     const assets = [
         { id: '1', name: 'Corinthian Pillar', type: 'Pillars' },
@@ -30,7 +31,10 @@ const A1DesignScreen = ({ navigation }) => {
         { id: '6', name: 'Lotus Tip Dome', type: 'Domes' },
     ];
 
-    const filteredAssets = assets.filter(asset => asset.type === activeTab || activeTab === 'Pillars');
+    // FIX #4: Strict filter — 'All' shows everything, otherwise match exactly
+    const filteredAssets = activeTab === 'All'
+        ? assets
+        : assets.filter(asset => asset.type === activeTab);
 
     return (
         <View style={styles.container}>
@@ -132,10 +136,7 @@ const styles = StyleSheet.create({
         padding: 16,
         borderRadius: 20,
         marginBottom: 16,
-        shadowColor: '#000',
-        shadowOpacity: 0.08,
-        shadowRadius: 12,
-        shadowOffset: { width: 0, height: 4 },
+        boxShadow: '0px 4px 12px rgba(0,0,0,0.08)',
         elevation: 4,
     },
     assetPreview: {

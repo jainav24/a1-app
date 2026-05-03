@@ -80,10 +80,7 @@ const styles = StyleSheet.create({
         right: 20,
         borderRadius: 25,
         paddingVertical: 15,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.1,
-        shadowRadius: 20,
+        boxShadow: '0px 10px 20px rgba(0,0,0,0.1)',
         elevation: 10,
     },
     scroll: {

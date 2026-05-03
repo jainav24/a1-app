@@ -46,10 +46,7 @@ const styles = StyleSheet.create({
     },
     iconContainer: {
         marginBottom: 30,
-        shadowColor: '#d32f2f',
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.2,
-        shadowRadius: 15,
+        boxShadow: '0px 10px 15px rgba(0,0,0,0.2)',
         elevation: 5,
     },
     welcome: {

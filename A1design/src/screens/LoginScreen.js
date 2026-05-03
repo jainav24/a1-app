@@ -22,11 +22,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../context/ThemeContext';
 import CustomButton from '../components/CustomButton';
 
-const { width } = Dimensions.get('window');
-
+import { getResponsiveValues } from '../utils/responsive';
 const LoginScreen = ({ navigation }) => {
   const { theme, toggleTheme, colors } = useTheme();
   const isDark = theme === 'dark';
+  const { height, width } = Dimensions.get('window');
+  const { moderateScale } = getResponsiveValues(width, height);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -42,13 +43,13 @@ const LoginScreen = ({ navigation }) => {
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 800,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }),
       Animated.spring(slideAnim, {
         toValue: 0,
         tension: 50,
         friction: 7,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }),
     ]).start();
   }, []);
@@ -103,7 +104,7 @@ const LoginScreen = ({ navigation }) => {
         style={styles.keyboardView}
       >
         <ScrollView
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[styles.scrollContent, { maxWidth: moderateScale(400), alignSelf: 'center', width: '100%' }]}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
@@ -282,12 +283,11 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   glassCard: {
+    alignSelf: 'stretch',
+    width: '100%',
     borderRadius: 30,
     padding: 25,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 15,
-    shadowOffset: { width: 0, height: 10 },
+    boxShadow: '0px 10px 15px rgba(0,0,0,0.1)',
     elevation: 10,
   },
   cardHeader: {
